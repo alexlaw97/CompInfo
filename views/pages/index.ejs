@@ -1,0 +1,164 @@
+<html>
+    <head>
+        <% include ../partials/header.ejs %>
+    </head>
+    <body>
+    <div align="center">   
+        <div class="container p-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="modal-title" id="exampleModalLabel" >Company Information</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">Company Name</label>
+                                <div class="col-sm-10">
+                                    <input class="form-control" id="txt_name" type="text" name="text">
+                                </div>
+                            </div>
+                        <button class="btn btn-primary" id="txtbtn" type="button" name="btn">Search</button>
+                    </div>
+                </div>
+            </div>
+        </div>  
+        <div id="search_project" align="center"></div>
+        <div  class="mx-auto w-50 p-3 text-center" id="list"> 
+            <table class="table table-striped table-responsive center" id="comp_list" >
+                <thead>
+                </thead>
+                <tbody> </tbody>
+            </table>
+        </div>
+
+         <!-- The Modal -->
+        <div class="modal fade" id="modal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                <h4 class="modal-title" text-align="center">News Information</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <div class="input-group">
+                        <img height="320" width="450" id="img">
+                    </div>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="">Source</span>
+                        </div>
+                        <input type="text" class="form-control" id="source" readonly>
+                    </div>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="">URL</span>
+                        </div>
+                        <a class="form-control" id="url" readonly></a>
+                    </div>
+                    <!-- <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="">Published At</span>
+                        </div>
+                        <input type="text" class="form-control" id="date" readonly>
+                    </div> -->
+                    <div class="form-group row">
+                        <span class="col-sm-2 col-form-label" id="">Description:</span>
+                    </div>
+                    <div class="col-sm-10">
+                        <textarea class="form-control-plaintext rounded-0" id="desc" wrap="hard" cols="50" rows="6" readonly></textarea>
+                    </div>
+                    <div class="form-group row">
+                            <span class="col-sm-2 col-form-label" id="">Content</span>
+                        </div>
+                        <div class="col-sm-10">
+                            <textarea class="form-control-plaintext rounded-0" id="content" wrap="hard" cols="50" rows="8" readonly></textarea>
+                        </div>
+                </div>
+                
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+                    
+                </div>
+            </div>
+        </div>
+
+        <script>
+            $(document).ready( function () {
+               
+            } );
+
+            $('#txtbtn').click(function() {
+                var inpuz = document.getElementById('txt_name').value;
+                $.ajax({
+                    type:"POST",
+                    dataType: "json",
+                    data:{comp: inpuz},
+                    url:"/searchnews",
+                    success:function(data)
+                    {
+                        console.log(data);
+                        if(data.length < 1){
+                            alert("Empty Data");
+                        }
+                        else{
+                            var curth = $('#list thead').html();
+                            var head = '<tr>\
+                                <th>Title</th>\
+                                <th>Action</th>\
+                                </tr>';
+                            for(var x=0; x<data.length; x++){
+                            var source = data[x][0].source;
+                            var author = data[x][0].author;
+                            var title = data[x][0].title;
+                            var description = data[x][0].desc;
+                            var url = data[x][0].url;
+                            var img = data[x][0].img;
+                            var date = data[x][0].data;
+                            var content = data[x][0].content;
+                            titles = title.replace(/["]+/g, '');
+                            var curdiv = $('#list tbody').html();
+                            var table = '<tr>\
+                            <td>'+titles+'</td>\
+                            <td><button class="btn btn-outline-primary" id="action" data-toggle="modal" data-target="#modal" data-source="'+source+'" data-author="'+author+'" data-title="'+title+'" data-desc="'+description+'" data-url="'+url+'" data-img="'+img+'" data-date="'+date+'" data-cont="'+content+'" >Detail</button></td></tr>';
+                            $('#list tbody').html(curdiv + table);
+                            }
+                            $('#list thead').html(curth + head);
+                            $('#comp_list').DataTable({
+                                "lengthChange": false,
+                                initComplete : function() {
+                                    $("#comp_list_filter").detach().appendTo('#search_project');
+                                }
+                            });                            
+                        }
+                    }
+                });
+            })
+
+            $(document).on("click", "#action", function () {
+                var description = $(this).data('desc');
+                var source = $(this).data('source');
+                var author = $(this).data('author');
+                var title = $(this).data('title');
+                var url = $(this).data('url');
+                var img = $(this).data('img');
+                var date = $(this).data('date');
+                var content = $(this).data('cont');
+                $("#desc").val(description);
+                $("#source").val(source);
+                $("#author").val(author);
+                $("#title").val(title);
+                $("#url").attr("href",url);
+                $("#url").text(url);
+                $("#img").attr("src",img)
+                $("#date").val(date);
+                $("#content").val(content);
+            });  
+
+        </script>
+
+    </body>
+</html>
