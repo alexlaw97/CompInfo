@@ -55,7 +55,7 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text" id="">URL</span>
                         </div>
-                        <a class="form-control" id="url" readonly></a>
+                        <a target="_blank" class="form-control text-truncate" style="max-width: 466px;" id="url" readonly></a>
                     </div>
                     <!-- <div class="input-group">
                         <div class="input-group-prepend">
@@ -93,6 +93,7 @@
 
             $('#txtbtn').click(function() {
                 var inpuz = document.getElementById('txt_name').value;
+                console.log($('#list th').length );
                 $.ajax({
                     type:"POST",
                     dataType: "json",
@@ -110,29 +111,52 @@
                                 <th>Title</th>\
                                 <th>Action</th>\
                                 </tr>';
-                            for(var x=0; x<data.length; x++){
-                            var source = data[x][0].source;
-                            var author = data[x][0].author;
-                            var title = data[x][0].title;
-                            var description = data[x][0].desc;
-                            var url = data[x][0].url;
-                            var img = data[x][0].img;
-                            var date = data[x][0].data;
-                            var content = data[x][0].content;
-                            titles = title.replace(/["]+/g, '');
-                            var curdiv = $('#list tbody').html();
-                            var table = '<tr>\
-                            <td>'+titles+'</td>\
-                            <td><button class="btn btn-outline-primary" id="action" data-toggle="modal" data-target="#modal" data-source="'+source+'" data-author="'+author+'" data-title="'+title+'" data-desc="'+description+'" data-url="'+url+'" data-img="'+img+'" data-date="'+date+'" data-cont="'+content+'" >Detail</button></td></tr>';
-                            $('#list tbody').html(curdiv + table);
+                            
+                            if($('#list th') .length > 1) {
+                                var tables = $('#comp_list').DataTable();
+                                tables
+                                .clear()
+                                .draw()
+                                .destroy()     
+                            }   
+                            for(var x=0; x<data.length; x++) {
+                                var source = data[x][0].source;
+                                var author = data[x][0].author;
+                                var title = data[x][0].title;
+                                var description = data[x][0].desc;
+                                descriptions = description.replace(/[<\\>\\/\\"\\=]+/g, "");
+                                var url = data[x][0].url;
+                                var img = data[x][0].img;
+                                var date = data[x][0].data;
+                                var content = data[x][0].content;
+                                content = content.replace(/[<\\>\\/\\"\\=]+/g, "");
+                                titles = title.replace(/["]+/g, '');
+                                var curdiv = $('#list tbody').html();
+                                var table = '<tr>\
+                                <td>'+titles+'</td>\
+                                <td><button class="btn btn-outline-primary" id="action" data-toggle="modal" data-target="#modal" data-source="'+source+'" data-author="'+author+'" data-title="'+title+'" data-desc="'+descriptions+'" data-url="'+url+'" data-img="'+img+'" data-date="'+date+'" data-cont="'+content+'" >Detail</button></td></tr>';
+                                $('#list tbody').html(curdiv + table);
+                                // var tables = $('#comp_list').DataTable();
+                                // tables.draw("asd");
                             }
-                            $('#list thead').html(curth + head);
-                            $('#comp_list').DataTable({
-                                "lengthChange": false,
-                                initComplete : function() {
-                                    $("#comp_list_filter").detach().appendTo('#search_project');
-                                }
-                            });                            
+                            
+                            if($('#list th').length < 1){
+                                $('#list thead').html(curth + head);
+                                $('#comp_list').DataTable({
+                                    "lengthChange": false,
+                                    initComplete : function() {
+                                        $("#comp_list_filter").detach().appendTo('#search_project');
+                                    }
+                                }); 
+                            }
+                            else{
+                                $('#comp_list').DataTable({
+                                    "lengthChange": false,
+                                    initComplete : function() {
+                                        $("#comp_list_filter").detach().appendTo('#search_project');
+                                    }
+                                }); 
+                            }                          
                         }
                     }
                 });
