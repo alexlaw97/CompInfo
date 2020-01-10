@@ -13,10 +13,33 @@
                         <div class="form-group row">
                                 <label class="col-sm-2 col-form-label">Keywords</label>
                                 <div class="col-sm-10">
-                                    <input class="form-control" id="txt_name" type="text" name="text">
+                                    <input class="form-control" id="txt_name" type="text" name="text" required>
                                 </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Country</label>
+                            <div class="col-sm-10">
+                            <select class="form-control" id="country" name="selected" required>
+                                <option value="">Choose...</option>
+                                <option value="au">Australia</option>
+                                <option value="cn">China</option>
+                                <option value="hk">Hong Kong</option>
+                                <option value="in">India</option>
+                                <option value="id">Indonesia</option>
+                                <option value="jp">Japan</option>
+                                <option value="my">Malaysia</option>
+                                <option value="nz">New Zealand</option>
+                                <option value="ph">Philippines</option>
+                                <option value="sg">Singapore</option>
+                                <option value="za">South Africa</option>
+                                <option value="kr">South Korea</option>
+                                <option value="tw">Taiwan</option>
+                                <option value="th">Thailand</option>   
+                            </select>
                             </div>
+                        </div> 
                         <button class="btn btn-primary" id="txtbtn" type="button" name="btn">Search</button>
+                        <button class="btn btn-primary" id="dtbtn" type="button" name="btn">Delete</button>
                     </div>
                 </div>
             </div>
@@ -91,75 +114,101 @@
                
             } );
 
-            $('#txtbtn').click(function() {
-                var inpuz = document.getElementById('txt_name').value;
-                console.log($('#list th').length );
+            $('#dtbtn').click(function(){
                 $.ajax({
                     type:"POST",
-                    dataType: "json",
-                    data:{comp: inpuz},
-                    url:"/searchnews",
-                    success:function(data)
-                    {
-                        console.log(data);
-                        if(data.length < 1){
-                            alert("Empty Data");
-                        }
-                        else{
-                            var curth = $('#list thead').html();
-                            var head = '<tr>\
-                                <th>Title</th>\
-                                <th>Action</th>\
-                                </tr>';
-                            
-                            if($('#list th') .length > 1) {
-                                var tables = $('#comp_list').DataTable();
-                                tables
-                                .clear()
-                                .draw()
-                                .destroy()     
-                            }   
-                            for(var x=0; x<data.length; x++) {
-                                var source = data[x][0].source;
-                                var author = data[x][0].author;
-                                var title = data[x][0].title;
-                                var description = data[x][0].desc;
-                                descriptions = description.replace(/[<\\>\\/\\"\\=]+/g, "");
-                                var url = data[x][0].url;
-                                var img = data[x][0].img;
-                                var date = data[x][0].data;
-                                var content = data[x][0].content;
-                                content = content.replace(/[<\\>\\/\\"\\=]+/g, "");
-                                titles = title.replace(/["]+/g, '');
-                                var curdiv = $('#list tbody').html();
-                                var table = '<tr>\
-                                <td>'+titles+'</td>\
-                                <td><button class="btn btn-outline-primary" id="action" data-toggle="modal" data-target="#modal" data-source="'+source+'" data-author="'+author+'" data-title="'+title+'" data-desc="'+descriptions+'" data-url="'+url+'" data-img="'+img+'" data-date="'+date+'" data-cont="'+content+'" >Detail</button></td></tr>';
-                                $('#list tbody').html(curdiv + table);
-                                // var tables = $('#comp_list').DataTable();
-                                // tables.draw("asd");
-                            }
-                            
-                            if($('#list th').length < 1){
-                                $('#list thead').html(curth + head);
-                                $('#comp_list').DataTable({
-                                    "lengthChange": false,
-                                    initComplete : function() {
-                                        $("#comp_list_filter").detach().appendTo('#search_project');
-                                    }
-                                }); 
+                    dataType:"json",
+                    data: {},
+                    url:"/delete",
+                    success:function(data){
+                        console.log("Done");
+                    }
+                })
+            })
+
+            $('#txtbtn').click(function() {
+                var inpuz = document.getElementById('txt_name').value;
+                var val = document.getElementById('country').value;
+                if(inpuz.length < 1 || val.length < 1){
+                    alert("Please don't blank it")
+                }
+                else{
+                    console.log($('#list th').length );
+                    $.ajax({
+                        type:"POST",
+                        dataType: "json",
+                        data:{
+                            comp: inpuz,
+                            cty : val
+                        },
+                        url:"/searchnews",
+                        success:function(data)
+                        {
+                            console.log(data);
+                            if(data.length < 1){
+                                alert("Empty Data");
                             }
                             else{
-                                $('#comp_list').DataTable({
-                                    "lengthChange": false,
-                                    initComplete : function() {
-                                        $("#comp_list_filter").detach().appendTo('#search_project');
+                                var curth = $('#list thead').html();
+                                var head = '<tr>\
+                                    <th>Title</th>\
+                                    <th>Action</th>\
+                                    </tr>';
+                                
+                                if($('#list th') .length > 1) {
+                                    var tables = $('#comp_list').DataTable();
+                                    tables
+                                    .clear()
+                                    .draw()
+                                    .destroy()     
+                                }   
+                                for(var x=0; x<data.length; x++) {
+                                    var source = data[x][0].source;
+                                    var author = data[x][0].author;
+                                    var title = data[x][0].title;
+                                    var description = data[x][0].desc;
+                                    if(!description == null){
+                                        description = description.replace(/[<\\>\\/\\"\\=]+/g, "");
                                     }
-                                }); 
-                            }                          
+                                    var url = data[x][0].url;
+                                    var img = data[x][0].img;
+                                    var date = data[x][0].data;
+                                    var content = data[x][0].content;
+                                    if(!content == null){
+                                        content = content.replace(/[<\\>\\/\\"\\=]+/g, "");
+                                    }
+                                    titles = title.replace(/["]+/g, '');
+                                    var curdiv = $('#list tbody').html();
+                                    var table = '<tr>\
+                                    <td>'+titles+'</td>\
+                                    <td><button class="btn btn-outline-primary" id="action" data-toggle="modal" data-target="#modal" data-source="'+source+'" data-author="'+author+'" data-title="'+title+'" data-desc="'+description+'" data-url="'+url+'" data-img="'+img+'" data-date="'+date+'" data-cont="'+content+'" >Detail</button></td></tr>';
+                                    $('#list tbody').html(curdiv + table);
+                                    // var tables = $('#comp_list').DataTable();
+                                    // tables.draw("asd");
+                                }
+                                
+                                if($('#list th').length < 1){
+                                    $('#list thead').html(curth + head);
+                                    $('#comp_list').DataTable({
+                                        "lengthChange": false,
+                                        initComplete : function() {
+                                            $("#comp_list_filter").detach().appendTo('#search_project');
+                                        }
+                                    }); 
+                                }
+                                else{
+                                    $('#comp_list').DataTable({
+                                        "lengthChange": false,
+                                        searching: false,
+                                        initComplete : function() {
+                                            $("#comp_list_filter").detach().appendTo('#search_project');
+                                        }
+                                    }); 
+                                }                          
+                            }
                         }
-                    }
-                });
+                    });                    
+                }
             })
 
             $(document).on("click", "#action", function () {
