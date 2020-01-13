@@ -80,6 +80,12 @@
                         </div>
                         <a target="_blank" class="form-control text-truncate" style="max-width: 466px;" id="url" readonly></a>
                     </div>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="">Website Traffic</span>
+                        </div>
+                        <a target="_blank" class="form-control text-truncate" style="max-width: 466px;" id="track" readonly></a>
+                    </div>
                     <!-- <div class="input-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text" id="">Published At</span>
@@ -214,6 +220,7 @@
             $(document).on("click", "#action", function () {
                 var description = $(this).data('desc');
                 var source = $(this).data('source');
+                var website = "https://www.similarweb.com/website/"+source+"";
                 var author = $(this).data('author');
                 var title = $(this).data('title');
                 var url = $(this).data('url');
@@ -229,6 +236,8 @@
                 $("#img").attr("src",img)
                 $("#date").val(date);
                 $("#content").val(content);
+                $("#track").attr("href",website);
+                $("#track").text(website);
             });  
 
         </script>
