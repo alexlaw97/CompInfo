@@ -85,7 +85,7 @@ const countries = ["my","id"];
   // });
     
     // for(y=0; y < 2; y++){
-      const querystr = `https://newsapi.org/v2/top-headlines?q=${compname}&country=${county}&apiKey=${apikey}`;
+      const querystr = `https://newsapi.org/v2/everything?q=${compname}&apiKey=${apikey}`;
       axios.get(querystr).then((response) => {
         // obj = Object.assign(obj, response.data);
         // console.log(response.data);
@@ -127,54 +127,53 @@ const countries = ["my","id"];
           // else{
           //   obj.push(response.data);
           // }
-          var cty;
-          if(county == "au"){
-            cty = "Australia";
-          }
-          else if(county == "cn"){
-            cty = "China";
-          }
-          else if (county == "hk"){
-            cty = "Hong Kong"
-          }
-          else if (county == "in"){
-            cty = "India";
-          }
-          else if (county == "id"){
-            cty = "Indonesia";
-          }
-          else if (county == "jp"){
-            cty = "Japan";
-          }
-          else if (county == "my"){
-            cty = "Malaysia";
-          }
-          else if (county == "nz"){
-            cty = "New Zealand";
-          }
-          else if (county == "ph"){
-            cty = "Philippines";
-          }
-          else if (county == "sg"){
-            cty = "Singapore";
-          }
-          else if (county == "za"){
-            cty = "South Africa";
-          }
-          else if (county == "kr"){
-            cty = "South Korea"
-          }
-          else if (county == "tw"){
-            cty = "Taiwan";
-          }
-          else if (county == "th"){
-            cty = "Thailand";
-          }
+          // var cty;
+          // if(county == "au"){
+          //   cty = "Australia";
+          // }
+          // else if(county == "cn"){
+          //   cty = "China";
+          // }
+          // else if (county == "hk"){
+          //   cty = "Hong Kong"
+          // }
+          // else if (county == "in"){
+          //   cty = "India";
+          // }
+          // else if (county == "id"){
+          //   cty = "Indonesia";
+          // }
+          // else if (county == "jp"){
+          //   cty = "Japan";
+          // }
+          // else if (county == "my"){
+          //   cty = "Malaysia";
+          // }
+          // else if (county == "nz"){
+          //   cty = "New Zealand";
+          // }
+          // else if (county == "ph"){
+          //   cty = "Philippines";
+          // }
+          // else if (county == "sg"){
+          //   cty = "Singapore";
+          // }
+          // else if (county == "za"){
+          //   cty = "South Africa";
+          // }
+          // else if (county == "kr"){
+          //   cty = "South Korea"
+          // }
+          // else if (county == "tw"){
+          //   cty = "Taiwan";
+          // }
+          // else if (county == "th"){
+          //   cty = "Thailand";
+          // }
           var info = require('./articledb');
           inf = new info({
             keyword : compname,
-            info : response.data,
-            country : cty
+            info : response.data
           })
           inf.save().then((result) => {
             console.log("done");
