@@ -99,7 +99,7 @@ const countries = ["my","id"];
           console.log("blabla");
         }
     }
-    setInterval(intervalFunc,30000);
+    setInterval(intervalFunc,1000);
 
   app.post('/searchnews', (req,res) => {
     var compname = req.body.comp;
