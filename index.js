@@ -69,7 +69,7 @@ const countries = ["my","id"];
 
   function intervalFunc() {
     var date = new Date(); // Create a Date object to find out what time it is
-        if(date.getHours() === 13 && date.getMinutes() === 10){ // Check the time
+        if(date.getHours() === 13 && date.getMinutes() === 13){ // Check the time
           var transporter = nodemailer.createTransport({
               service: 'gmail',
               auth: {
