@@ -1,4 +1,5 @@
 const express = require('express')
+const amqp = require('amqplib/callback_api')
 const path = require('path')
 const bodyParser = require('body-parser')
 const axios = require('axios')
@@ -13,6 +14,8 @@ var password = 'Contributor123~';
 const db = "mongodb+srv://admin:abc0123@cluster0-k1y0a.mongodb.net/CompInfo?retryWrites=true&w=majority";
 const PORT = process.env.PORT || 5000
 const countries = ["my","id"];
+
+
 
   // Mongodb connection
   mongoose.connect(db).then(() => { 
@@ -69,30 +72,31 @@ const countries = ["my","id"];
 
   function intervalFunc() {
     var date = new Date(); // Create a Date object to find out what time it is
-        if(date.getHours() === 13 && date.getMinutes() === 17){ // Check the time
-          var transporter = nodemailer.createTransport({
-              service: 'gmail',
-              auth: {
-                user: username,
-                pass: password
-              }
-            });
+        if(date.getHours() > 13){ // Check the time
+          // var transporter = nodemailer.createTransport({
+          //     service: 'gmail',
+          //     auth: {
+          //       user: username,
+          //       pass: password
+          //     }
+          //   });
             
-            var mailOptions = {
-              from: username,
-              to: 'robotboss1997@gmail.com',
-              subject: 'Warning ',
-              text: "Hi testing 1 2"
-            };
+          //   var mailOptions = {
+          //     from: username,
+          //     to: 'robotboss1997@gmail.com',
+          //     subject: 'Warning ',
+          //     text: "Hi testing 1 2"
+          //   };
             
-            transporter.sendMail(mailOptions, function(error, info){
-              if (error) {
-                console.log(error);
-              } else {
-                console.log('Email sent: ' + info.response);
+          //   transporter.sendMail(mailOptions, function(error, info){
+          //     if (error) {
+          //       console.log(error);
+          //     } else {
+          //       console.log('Email sent: ' + info.response);
                 
-              }
-            });
+          //     }
+          //   });
+          console.log("blabla");
         }
     }
     setInterval(intervalFunc,30000);
