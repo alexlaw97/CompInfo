@@ -5,8 +5,11 @@ const axios = require('axios')
 const mongoose = require('mongoose')
 const app = express()
 const NewsAPI = require('newsapi')
+const nodemailer = require("nodemailer")
 const apikey = "577b0d2c8e9e4d579ed70cdc9a09aba0";
 const newsapi = new NewsAPI('577b0d2c8e9e4d579ed70cdc9a09aba0');
+var username = 'contributor477@gmail.com';
+var password = 'Contributor123~';
 const db = "mongodb+srv://admin:abc0123@cluster0-k1y0a.mongodb.net/CompInfo?retryWrites=true&w=majority";
 const PORT = process.env.PORT || 5000
 const countries = ["my","id"];
@@ -25,6 +28,30 @@ const countries = ["my","id"];
 
   app.get('/', (req, res) => res.render('pages/index'))
 
+    // var transporter = nodemailer.createTransport({
+    //   service: 'gmail',
+    //   auth: {
+    //     user: username,
+    //     pass: password
+    //   }
+    // });
+    
+    // var mailOptions = {
+    //   from: username,
+    //   to: 'robotboss1997@gmail.com, wei.jing.law@intel.com',
+    //   subject: 'Warning ',
+    //   text: "Hi testing 1 2"
+    // };
+    
+    // transporter.sendMail(mailOptions, function(error, info){
+    //   if (error) {
+    //     console.log(error);
+    //   } else {
+    //     console.log('Email sent: ' + info.response);
+        
+    //   }
+    // });
+
   app.post('/delete', (req,res) => {
     var info = require('./articledb');
     info.remove({})
@@ -32,6 +59,43 @@ const countries = ["my","id"];
       console.log("Done");
     })
   })
+
+  //   window.setInterval(function(){ // Set interval for checking
+  //     var date = new Date(); // Create a Date object to find out what time it is
+  //     if(date.getHours() === 10 && date.getMinutes() === 55){ // Check the time
+  //         console.log("reach");
+  //     }
+  // }, 60000); // Repeat every 60000 milliseconds (1 minute)
+
+  function intervalFunc() {
+    var date = new Date(); // Create a Date object to find out what time it is
+        if(date.getHours() === 13 && date.getMinutes() === 04){ // Check the time
+          var transporter = nodemailer.createTransport({
+              service: 'gmail',
+              auth: {
+                user: username,
+                pass: password
+              }
+            });
+            
+            var mailOptions = {
+              from: username,
+              to: 'robotboss1997@gmail.com',
+              subject: 'Warning ',
+              text: "Hi testing 1 2"
+            };
+            
+            transporter.sendMail(mailOptions, function(error, info){
+              if (error) {
+                console.log(error);
+              } else {
+                console.log('Email sent: ' + info.response);
+                
+              }
+            });
+        }
+    }
+    setInterval(intervalFunc,60000);
 
   app.post('/searchnews', (req,res) => {
     var compname = req.body.comp;
@@ -83,9 +147,10 @@ const countries = ["my","id"];
     //   console.log(error);
     // })
   // });
-    
+   
     // for(y=0; y < 2; y++){
-      const querystr = `https://newsapi.org/v2/everything?q=${compname}&apiKey=${apikey}`;
+      const querystr = `https://newsapi.org/v2/everything
+      ?q=${compname}&apiKey=${apikey}`;
       axios.get(querystr).then((response) => {
         // obj = Object.assign(obj, response.data);
         // console.log(response.data);
