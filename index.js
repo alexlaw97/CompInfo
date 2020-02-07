@@ -69,7 +69,7 @@ const countries = ["my","id"];
 
   function intervalFunc() {
     var date = new Date(); // Create a Date object to find out what time it is
-        if(date.getHours() === 13 && date.getMinutes() === 07){ // Check the time
+        if(date.getHours() === 13 && date.getMinutes() === 10){ // Check the time
           var transporter = nodemailer.createTransport({
               service: 'gmail',
               auth: {
@@ -95,7 +95,7 @@ const countries = ["my","id"];
             });
         }
     }
-    setInterval(intervalFunc,60000);
+    setInterval(intervalFunc,30000);
 
   app.post('/searchnews', (req,res) => {
     var compname = req.body.comp;
