@@ -38,7 +38,7 @@ var password = 'Contributor123~';
       from: username,
       to: 'robotboss1997@gmail.com',
       subject: 'Warning ',
-      text: a
+      text: 'asdasdasdasd'
   };
       
   transporter.sendMail(mailOptions, function(error, info){
