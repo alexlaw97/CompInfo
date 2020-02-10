@@ -27,7 +27,9 @@ var password = 'Contributor123~';
 
 
     var transporter = nodemailer.createTransport({
-      service: 'gmail',
+      host: 'smtp.gmail.com',
+      port: 465,
+      secure: true,
       auth: {
         user: username,
         pass: password
