@@ -1,4 +1,7 @@
 const amqp = require('amqplib/callback_api');
+const nodemailer = require('nodemailer')
+var username = 'contributor477@gmail.com';
+var password = 'Contributor123~';
 // amqp.connect('amqp://hfptilho:Bun-1UDcqu42BFT2RHnHVEkAsZYi3doP@toad.rmq.cloudamqp.com/hfptilho', function(err, conn) {
   
 //   conn.createChannel(function(err, ch) {
