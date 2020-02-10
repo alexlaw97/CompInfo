@@ -29,23 +29,23 @@ var password = 'Contributor123~';
     var transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-          user: username,
-          pass: password
+        user: username,
+        pass: password
       }
-  });
-      
-  var mailOptions = {
+    });
+    
+    var mailOptions = {
       from: username,
-      to: 'robotboss1997@gmail.com',
+      to: 'robotboss1997@gmail.com, wei.jing.law@intel.com',
       subject: 'Warning ',
-      text: 'asdasdasdasd'
-  };
-      
-  transporter.sendMail(mailOptions, function(error, info){
+      text: "Hi testing 1 2"
+    };
+    
+    transporter.sendMail(mailOptions, function(error, info){
       if (error) {
-          console.log(error);
+        console.log(error);
       } else {
-          console.log('Email sent: ' + info.response);
-              
+        console.log('Email sent: ' + info.response);
+        
       }
-  });
+    });
