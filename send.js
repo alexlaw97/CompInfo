@@ -31,14 +31,14 @@ var password = 'Contributor123~';
       port: 465,
       secure: true,
       auth: {
-        user: username,
-        pass: password
+        user: 'contributor477@gmail.com',
+        pass: 'Contributor123~'
       }
     });
     
     var mailOptions = {
       from: username,
-      to: 'robotboss1997@gmail.com, wei.jing.law@intel.com',
+      to: 'robotboss1997@gmail.com',
       subject: 'Warning ',
       text: "Hi testing 1 2"
     };
