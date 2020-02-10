@@ -29,8 +29,21 @@ const countries = ["my","id"];
   app.use(bodyParser.urlencoded({extended: true}))
 
 
-  app.get('/', (req, res) => res.render('pages/index'))
+  // app.get('/', (req, res) => res.render('pages/index'))
 
+  app.get('/', sendToQueue,(req, res) => res.render('pages/index'))
+
+
+  function sendToQueue() {
+    amqp.connect('amqp://hfptilho:Bun-1UDcqu42BFT2RHnHVEkAsZYi3doP@toad.rmq.cloudamqp.com/hfptilho', function(err, conn) {
+      conn.createChannel(function(err, ch) {
+        const q = 'email';
+        ch.assertQueue(q, { durable: true });
+        ch.sendToQueue(q, new Buffer('Hello'),{ persistent: true });
+        console.log("Message sent to queue : ", );
+      });
+    });
+  }
     // var transporter = nodemailer.createTransport({
     //   service: 'gmail',
     //   auth: {
@@ -70,36 +83,36 @@ const countries = ["my","id"];
   //     }
   // }, 60000); // Repeat every 60000 milliseconds (1 minute)
 
-  function intervalFunc() {
-    var date = new Date(); // Create a Date object to find out what time it is
-        if(date.getHours() > 13){ // Check the time
-          // var transporter = nodemailer.createTransport({
-          //     service: 'gmail',
-          //     auth: {
-          //       user: username,
-          //       pass: password
-          //     }
-          //   });
+  // function intervalFunc() {
+  //   var date = new Date(); // Create a Date object to find out what time it is
+  //       if(date.getHours() > 13){ // Check the time
+  //         // var transporter = nodemailer.createTransport({
+  //         //     service: 'gmail',
+  //         //     auth: {
+  //         //       user: username,
+  //         //       pass: password
+  //         //     }
+  //         //   });
             
-          //   var mailOptions = {
-          //     from: username,
-          //     to: 'robotboss1997@gmail.com',
-          //     subject: 'Warning ',
-          //     text: "Hi testing 1 2"
-          //   };
+  //         //   var mailOptions = {
+  //         //     from: username,
+  //         //     to: 'robotboss1997@gmail.com',
+  //         //     subject: 'Warning ',
+  //         //     text: "Hi testing 1 2"
+  //         //   };
             
-          //   transporter.sendMail(mailOptions, function(error, info){
-          //     if (error) {
-          //       console.log(error);
-          //     } else {
-          //       console.log('Email sent: ' + info.response);
+  //         //   transporter.sendMail(mailOptions, function(error, info){
+  //         //     if (error) {
+  //         //       console.log(error);
+  //         //     } else {
+  //         //       console.log('Email sent: ' + info.response);
                 
-          //     }
-          //   });
-          console.log("blabla");
-        }
-    }
-    setInterval(intervalFunc,1000);
+  //         //     }
+  //         //   });
+  //         console.log("blabla");
+  //       }
+  //   }
+  //   setInterval(intervalFunc,1000);
 
   app.post('/searchnews', (req,res) => {
     var compname = req.body.comp;
