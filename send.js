@@ -52,7 +52,7 @@ const amqp = require('amqplib/callback_api');
     //   }
     // });
     var helper = require('sendgrid').mail;
-    var from_email = new helper.Email('test@example.com');
+    var from_email = new helper.Email('robotboss1997@gmail.com');
     var to_email = new helper.Email('weijinglaw97@gmail.com');
     var subject = 'Hello World from the SendGrid Node.js Library!';
     var content = new helper.Content('text/plain', 'Hello, Email!');
