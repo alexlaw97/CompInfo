@@ -55,7 +55,7 @@ const amqp = require('amqplib/callback_api');
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 const msg = {
   to: 'weijinglaw97@gmail.com',
-  from: 'test@example.com',
+  from: 'robotboss1997@gmail.com',
   subject: 'Sending with Twilio SendGrid is Fun',
   text: 'and easy to do anywhere, even with Node.js',
   html: '<strong>and easy to do anywhere, even with Node.js</strong>',
