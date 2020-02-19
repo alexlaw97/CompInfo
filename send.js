@@ -4,13 +4,14 @@ const db = "mongodb+srv://admin:abc0123@cluster0-k1y0a.mongodb.net/CompInfo?retr
 const nodemailer = require('nodemailer')
 var username = 'contributor477@gmail.com';
 var password = 'Contributor123~';
+var date = new Date();
 // amqp.connect('amqp://hfptilho:Bun-1UDcqu42BFT2RHnHVEkAsZYi3doP@toad.rmq.cloudamqp.com/hfptilho', function(err, conn) {
   // Mongodb connection
 mongoose.connect(db).then(() => { 
   console.log('connected');
 })
 
-    var date = new Date();
+if(date.getDay() == "3"){
     var emdb = require('./emaildb.js');
     var title = [];
     var msg_title = [];
@@ -78,6 +79,7 @@ mongoose.connect(db).then(() => {
     });
   }
   
+  //Pop out all the array into html format
   function extract(msg_desc,msg_title,msg_url){
     var desc = [];
     var title = [];
@@ -91,5 +93,5 @@ mongoose.connect(db).then(() => {
    }
    return tags;
   }
- 
+}
   
