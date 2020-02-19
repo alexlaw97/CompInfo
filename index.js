@@ -4,6 +4,7 @@ const path = require('path')
 const bodyParser = require('body-parser')
 const axios = require('axios')
 const mongoose = require('mongoose')
+const utf8 = require('utf8')
 const app = express()
 const NewsAPI = require('newsapi')
 const nodemailer = require("nodemailer")
@@ -82,70 +83,70 @@ app.post('/searchnews', (req,res) => {
         array.push(news);
       }
       res.send(array); 
-  //     inf = new info({
-  //       keyword : compname,
-  //       info : response.data
-  //     })
-  //     inf.save().then((result) => {
-  //       var tdydate = new Date();
-  //       tdydate.setHours(tdydate.getHours() + 8); //Set timezone to GMT + 8
-  //       emdb
-  //       .find()
-  //       .sort({"_id":-1})
-  //       .limit(1)
-  //       .then((response) =>{
-  //         if(response.length > 0){
-  //           lasdate = response[0].date;
-  //           id = response[0]._id;
-  //           var Diff_in_time = lasdate.getTime() - tdydate.getTime();
-  //           var Diff_in_days = Diff_in_time / (1000*3600*24);
-  //           if(Diff_in_days > -7 && Diff_in_days < 1){ //Check whether it is between 7 days 
-  //             old = response[0].data;
-  //             for(var x = 0; x < old.length;x++){
-  //               if(old[x][0] == compname){
-  //                 break;
-  //               }
-  //               if(x == old.length-1){
-  //                 old.push(array);
-  //               }
-  //             }     
-  //             emdb.updateOne({
-  //               _id : id
-  //             },
-  //             {
-  //               $set:{
-  //                 "data" : old
-  //               }},
-  //             { upsert:true },
-  //             function(result){
-  //               console.log("done");
-  //             })     
-  //           }
-  //           else{ //else create a new document
-  //             old.push(array);
-  //             email_db = new emdb({
-  //               date : tdydate,
-  //               send : "0",
-  //               data : old
-  //             })
-  //             email_db.save().then((result) => {
-  //               console.log("done");
-  //             })
-  //           }
-  //         }
-  //         else{
-  //           old.push(array);
-  //           email_db = new emdb({
-  //             date : tdydate,
-  //             send : "0",
-  //             data : old
-  //           })
-  //           email_db.save().then((result) => {
-  //             console.log("done");
-  //           })
-  //         }
-  //       })
-  //     })
+      inf = new info({
+        keyword : compname,
+        info : response.data
+      })
+      inf.save().then((result) => {
+        var tdydate = new Date();
+        tdydate.setHours(tdydate.getHours() + 8); //Set timezone to GMT + 8
+        emdb
+        .find()
+        .sort({"_id":-1})
+        .limit(1)
+        .then((response) =>{
+          if(response.length > 0){
+            lasdate = response[0].date;
+            id = response[0]._id;
+            var Diff_in_time = lasdate.getTime() - tdydate.getTime();
+            var Diff_in_days = Diff_in_time / (1000*3600*24);
+            if(Diff_in_days > -7 && Diff_in_days < 1){ //Check whether it is between 7 days 
+              old = response[0].data;
+              for(var x = 0; x < old.length;x++){
+                if(old[x][0] == compname){
+                  break;
+                }
+                if(x == old.length-1){
+                  old.push(array);
+                }
+              }     
+              emdb.updateOne({
+                _id : id
+              },
+              {
+                $set:{
+                  "data" : old
+                }},
+              { upsert:true },
+              function(result){
+                console.log("done");
+              })     
+            }
+            else{ //else create a new document
+              old.push(array);
+              email_db = new emdb({
+                date : tdydate,
+                send : "0",
+                data : old
+              })
+              email_db.save().then((result) => {
+                console.log("done");
+              })
+            }
+          }
+          else{
+            old.push(array);
+            email_db = new emdb({
+              date : tdydate,
+              send : "0",
+              data : old
+            })
+            email_db.save().then((result) => {
+              console.log("done");
+            })
+          }
+        })
+      })
     }   
   }) 
 })
@@ -153,17 +154,18 @@ app.post('/searchnews', (req,res) => {
 app.post('/search_advanced_news', (req,res) => {
   var compname = req.body.comp;
   var country = req.body.coun;
-  res.charset = 'utf-8';
-  res.contentType('text');
+  var keyword = utf8.encode(compname)
   var info = require('./articledb');
   var emdb = require('./emaildb.js');
   var news = [];
   var array = [];
   var old = [];
   
-  const querystr = `https://newsapi.org/v2/top-headlines?q=${compname}&country=${country}&apiKey=${apikey}`; //Get Api by link it to the url and api key
+  const querystr = `https://newsapi.org/v2/top-headlines?q=${keyword}&country=${country}&apiKey=${apikey}`; //Get Api by link it to the url and api key
+  console.log(querystr);
   axios.get(querystr).then((response) => {
-    array.push(compname);
+    // array.push(compname);
+    console.log(response);
     if(response == null){
       console.log("error");
     }
