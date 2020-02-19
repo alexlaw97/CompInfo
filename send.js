@@ -70,9 +70,10 @@ mongoose.connect(db).then(() => {
         console.log(error);
         console.log("error : " + JSON.stringify(error));
         console.log("info : " + JSON.stringify(info))
+        return process.abort();
       } else {
         console.log('Email sent: ' + info.response);
-        
+        return process.abort();
       }
     });
   }
@@ -91,4 +92,4 @@ mongoose.connect(db).then(() => {
    return tags;
   }
  
-  return process.abort();
+  
