@@ -94,4 +94,7 @@ if(date.getDay() == "3"){
    return tags;
   }
 }
+else{
+  return process.exit(22);
+}
   
