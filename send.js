@@ -11,7 +11,7 @@ mongoose.connect(db).then(() => {
   console.log('connected');
 })
 
-if(date.getDay() == "3"){
+if(date.getDay() == "5"){
     var emdb = require('./emaildb.js');
     var title = [];
     var msg_title = [];
@@ -61,7 +61,7 @@ if(date.getDay() == "3"){
     
     var mailOptions = {
       from: username,
-      to: 'robotboss1997@gmail.com',
+      to: 'boon.hee.kam@intel.com',
       subject: "Topic :" +upper_title,
       html : "Hi Thomas," + extract(msg_desc,msg_title,msg_url)
     };
