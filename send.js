@@ -90,3 +90,5 @@ mongoose.connect(db).then(() => {
    }
    return tags;
   }
+ 
+  return process.abort();
