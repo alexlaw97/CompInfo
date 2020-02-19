@@ -16,10 +16,29 @@
                                 <input class="form-control" id="txt_name" type="text" name="text" required>
                             </div>
                         </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Country</label>
+                            <div class="col-sm-10">
+                            <select class="form-control" id="country" name="selected" required>
+                                <option value="">Choose...</option>
+                                <option value="au">Australia</option>
+                                <option value="cn">China</option>
+                                <option value="hk">Hong Kong</option>
+                                <option value="in">India</option>
+                                <option value="id">Indonesia</option>
+                                <option value="jp">Japan</option>
+                                <option value="my">Malaysia</option>
+                                <option value="nz">New Zealand</option>
+                                <option value="ph">Philippines</option>
+                                <option value="sg">Singapore</option>
+                                <option value="za">South Africa</option>
+                                <option value="kr">South Korea</option>
+                                <option value="tw">Taiwan</option>
+                                <option value="th">Thailand</option>   
+                            </select>
+                            </div>
+                        </div> 
                         <button class="btn btn-primary" id="txtbtn" type="button" name="btn">Search</button>
-                        <form action="advanced_search" method="post"><button class="btn btn-warning" id="btn2" type="submit">Advanced Search</button></form>
-                        
-                        <!--  <button class="btn btn-primary" id="dtbtn" type="button" name="btn">Delete</button> --> 
                     </div>
                 </div>
             </div>
@@ -66,12 +85,6 @@
                         </div>
                         <a target="_blank" class="form-control text-truncate" style="max-width: 466px;" id="track" readonly></a>
                     </div>
-                    <!-- <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" id="">Published At</span>
-                        </div>
-                        <input type="text" class="form-control" id="date" readonly>
-                    </div> -->
                     <div class="form-group row">
                         <span class="col-sm-2 col-form-label" id="">Description:</span>
                     </div>
@@ -100,21 +113,9 @@
                
             } );
 
-            $('#dtbtn').click(function(){
-                $.ajax({
-                    type:"POST",
-                    dataType:"json",
-                    data: {},
-                    url:"/delete",
-                    success:function(data){
-                        console.log("Done");
-                    }
-                })
-            })
-
             $('#txtbtn').click(function() {
                 var inpuz = document.getElementById('txt_name').value;
-                // var val = document.getElementById('country').value;
+                var val = document.getElementById('country').value;
                 if(inpuz.length < 1 ){
                     alert("Please don't blank it")
                 }
@@ -124,9 +125,10 @@
                         type:"POST",
                         dataType: "json",
                         data:{
-                            comp: inpuz
+                            comp: inpuz,
+                            coun : val
                         },
-                        url:"/searchnews",
+                        url:"/search_advanced_news",
                         success:function(data)
                         {
                             console.log(data);
