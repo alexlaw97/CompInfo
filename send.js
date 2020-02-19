@@ -1,83 +1,92 @@
-const amqp = require('amqplib/callback_api');
-// const nodemailer = require('nodemailer')
-// var username = 'contributor477@gmail.com';
-// var password = 'Contributor123~';
+// const amqp = require('amqplib/callback_api');
+const mongoose = require('mongoose')
+const db = "mongodb+srv://admin:abc0123@cluster0-k1y0a.mongodb.net/CompInfo?retryWrites=true&w=majority";
+const nodemailer = require('nodemailer')
+var username = 'contributor477@gmail.com';
+var password = 'Contributor123~';
 // amqp.connect('amqp://hfptilho:Bun-1UDcqu42BFT2RHnHVEkAsZYi3doP@toad.rmq.cloudamqp.com/hfptilho', function(err, conn) {
+  // Mongodb connection
+mongoose.connect(db).then(() => { 
+  console.log('connected');
+})
+
+    var date = new Date();
+    var emdb = require('./emaildb.js');
+    var title = [];
+    var msg_title = [];
+    var msg_desc = [];
+    var msg_url = [];
+    var msg = [];
+    msg.length = 0;
+    
+    emdb
+    .find()
+    .sort({"_id":-1})
+    .limit(1)
+    .then((response) =>{
+      for(var x = 0; x < response[0].data.length; x++){   
+        msg_title.length = 0;
+        msg_desc.length = 0;
+        msg_url.length = 0; 
+        // title.push(response[0].data[x][0]);
+        title = response[0].data[x][0];
+        upper_title = title.toUpperCase();
+        // msg.push(titles);
+        for(var y = 1; y < response[0].data[x].length; y++){
+          msg_title.push(response[0].data[x][y][0].title);
+          msg_desc.push(response[0].data[x][y][0].desc);
+          msg_url.push(response[0].data[x][y][0].url); 
+        }
+        nodemail(upper_title,msg_desc,msg_title,msg_url);
+      }
+      
+    
+    if(date.getHours() === 13 && date.getMinutes() === 12){
+      send_email(title);
+    }
+    })
   
-//   conn.createChannel(function(err, ch) {
-//     const q = 'hello';
-//     ch.assertQueue(q, { durable: true });
-//     // Note: on Node 6 Buffer.from(msg) should be used
-//     ch.sendToQueue(q, 
-//      new Buffer('Hello World!'),
-//      { persistent: true }
-//     );
-//     console.log(" [x] Sent 'Hello World!'");
-//   });
-// });
-
-// amqp.connect('amqp://hfptilho:Bun-1UDcqu42BFT2RHnHVEkAsZYi3doP@toad.rmq.cloudamqp.com/hfptilho', function(err, conn) {
-//       conn.createChannel(function(err, ch) {
-//         const q = 'email';
-//         ch.assertQueue(q, { durable: true });
-//         ch.sendToQueue(q, new Buffer('Hello'),{ persistent: true });
-//         console.log("Message sent to queue : ", );
-//       });
-//     });
-
-
-    // var transporter = nodemailer.createTransport({
-    //   host: 'smtp.gmail.com',
-    //   port: 465,
-    //   secure: true,
-    //   auth: {
-    //     user: 'contributor477@gmail.com',
-    //     pass: 'Contributor123~'
-    //   }
-    // });
+  function nodemail(upper_title,msg_desc,msg_title,msg_url){
+    var msg_desc = msg_desc;
+    var msg_title = msg_title;
+    var msg_url = msg_url;
+    var transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: username,
+        pass: password
+      }
+    });
     
-    // var mailOptions = {
-    //   from: username,
-    //   to: 'robotboss1997@gmail.com',
-    //   subject: 'Warning ',
-    //   text: "Hi testing 1 2"
-    // };
-    
-    // transporter.sendMail(mailOptions, function(error, info){
-    //   if (error) {
-    //     console.log(error);
-    //   } else {
-    //     console.log('Email sent: ' + info.response);
-        
-    //   }
-    // });
-    // var helper = require('sendgrid').mail;
-    // var from_email = new helper.Email('robotboss1997@gmail.com');
-    // var to_email = new helper.Email('robotboss1997@gmail.com');
-    // var subject = 'Hello World from the SendGrid Node.js Library!';
-    // var content = new helper.Content('text/plain', 'Hello, Email!');
-    // var mail = new helper.Mail(from_email, subject, to_email, content);
-    
-    // var sg = require('sendgrid')(process.env.SENDGRID_API_KEY);
-    // var request = sg.emptyRequest({
-    //   method: 'POST',
-    //   path: '/v3/mail/send',
-    //   body: mail.toJSON(),
-    // });
-    
-    // sg.API(request, function(error, response) {
-    //   console.log(response.statusCode);
-    //   console.log(response.body);
-    //   console.log(response.headers);
-    // });
-
-    const sgMail = require("@sendgrid/mail");
-    sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-    const msg={
-      to:"robotboss1997@gmail.com",
-      from: "robotboss1997@gmail.com",
-      subject: "Sending Fun",
-      text: " easy",
-      html: "<strong> Well Played</strong>",
+    var mailOptions = {
+      from: username,
+      to: 'robotboss1997@gmail.com',
+      subject: "Topic :" +upper_title,
+      html : "Hi Thomas," + extract(msg_desc,msg_title,msg_url)
     };
-    sgMail.send(msg);
+    
+    transporter.sendMail(mailOptions, function(error, info){
+      if (error) {
+        console.log(error);
+        console.log("error : " + JSON.stringify(error));
+        console.log("info : " + JSON.stringify(info))
+      } else {
+        console.log('Email sent: ' + info.response);
+        
+      }
+    });
+  }
+  
+  function extract(msg_desc,msg_title,msg_url){
+    var desc = [];
+    var title = [];
+    var url = [];
+    desc = msg_desc;
+    title = msg_title;
+    url = msg_url;
+   var tags = "";
+   for(var x = 0; x < desc.length; x ++){
+    tags += "<h3>'"+title[x]+"'</h3><h4>'"+desc[x]+"'</h4><a href='"+url[x]+"'>Link</a><br>"
+   }
+   return tags;
+  }
