@@ -28,7 +28,7 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}))
 
 
-app.get('/',email, (req, res) => res.render('pages/index'))
+app.get('/', (req, res) => res.render('pages/index'))
 
  
 
@@ -148,87 +148,87 @@ app.post('/searchnews', (req,res) => {
   }) 
 })
 
-function email(){
-  var date = new Date();
-  var emdb = require('./emaildb.js');
-  var title = [];
-  var msg_title = [];
-  var msg_desc = [];
-  var msg_url = [];
-  var msg = [];
-  msg.length = 0;
+// function email(){
+//   var date = new Date();
+//   var emdb = require('./emaildb.js');
+//   var title = [];
+//   var msg_title = [];
+//   var msg_desc = [];
+//   var msg_url = [];
+//   var msg = [];
+//   msg.length = 0;
   
-  emdb
-  .find()
-  .sort({"_id":-1})
-  .limit(1)
-  .then((response) =>{
-    for(var x = 0; x < response[0].data.length; x++){   
-      msg_title.length = 0;
-      msg_desc.length = 0;
-      msg_url.length = 0; 
-      // title.push(response[0].data[x][0]);
-      title = response[0].data[x][0];
-      upper_title = title.toUpperCase();
-      // msg.push(titles);
-      for(var y = 1; y < response[0].data[x].length; y++){
-        msg_title.push(response[0].data[x][y][0].title);
-        msg_desc.push(response[0].data[x][y][0].desc);
-        msg_url.push(response[0].data[x][y][0].url); 
-      }
-      nodemail(upper_title,msg_desc,msg_title,msg_url);
-    }
+//   emdb
+//   .find()
+//   .sort({"_id":-1})
+//   .limit(1)
+//   .then((response) =>{
+//     for(var x = 0; x < response[0].data.length; x++){   
+//       msg_title.length = 0;
+//       msg_desc.length = 0;
+//       msg_url.length = 0; 
+//       // title.push(response[0].data[x][0]);
+//       title = response[0].data[x][0];
+//       upper_title = title.toUpperCase();
+//       // msg.push(titles);
+//       for(var y = 1; y < response[0].data[x].length; y++){
+//         msg_title.push(response[0].data[x][y][0].title);
+//         msg_desc.push(response[0].data[x][y][0].desc);
+//         msg_url.push(response[0].data[x][y][0].url); 
+//       }
+//       nodemail(upper_title,msg_desc,msg_title,msg_url);
+//     }
     
   
-  if(date.getHours() === 13 && date.getMinutes() === 12){
-    send_email(title);
-  }
-  })
-}
+//   if(date.getHours() === 13 && date.getMinutes() === 12){
+//     send_email(title);
+//   }
+//   })
+// }
 
-function nodemail(upper_title,msg_desc,msg_title,msg_url){
-  var msg_desc = msg_desc;
-  var msg_title = msg_title;
-  var msg_url = msg_url;
-  var transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-      user: username,
-      pass: password
-    }
-  });
+// function nodemail(upper_title,msg_desc,msg_title,msg_url){
+//   var msg_desc = msg_desc;
+//   var msg_title = msg_title;
+//   var msg_url = msg_url;
+//   var transporter = nodemailer.createTransport({
+//     service: 'gmail',
+//     auth: {
+//       user: username,
+//       pass: password
+//     }
+//   });
   
-  var mailOptions = {
-    from: username,
-    to: 'robotboss1997@gmail.com',
-    subject: "Topic :" +upper_title,
-    html : "Hi Thomas," + extract(msg_desc,msg_title,msg_url)
-  };
+//   var mailOptions = {
+//     from: username,
+//     to: 'robotboss1997@gmail.com',
+//     subject: "Topic :" +upper_title,
+//     html : "Hi Thomas," + extract(msg_desc,msg_title,msg_url)
+//   };
   
-  transporter.sendMail(mailOptions, function(error, info){
-    if (error) {
-      console.log(error);
-      console.log("error : " + JSON.stringify(error));
-      console.log("info : " + JSON.stringify(info))
-    } else {
-      console.log('Email sent: ' + info.response);
+//   transporter.sendMail(mailOptions, function(error, info){
+//     if (error) {
+//       console.log(error);
+//       console.log("error : " + JSON.stringify(error));
+//       console.log("info : " + JSON.stringify(info))
+//     } else {
+//       console.log('Email sent: ' + info.response);
       
-    }
-  });
-}
+//     }
+//   });
+// }
 
-function extract(msg_desc,msg_title,msg_url){
-  var desc = [];
-  var title = [];
-  var url = [];
-  desc = msg_desc;
-  title = msg_title;
-  url = msg_url;
- var tags = "";
- for(var x = 0; x < desc.length; x ++){
-  tags += "<h3>'"+title[x]+"'</h3><h4>'"+desc[x]+"'</h4><a href='"+url[x]+"'>Link</a><br>"
- }
- return tags;
-}
+// function extract(msg_desc,msg_title,msg_url){
+//   var desc = [];
+//   var title = [];
+//   var url = [];
+//   desc = msg_desc;
+//   title = msg_title;
+//   url = msg_url;
+//  var tags = "";
+//  for(var x = 0; x < desc.length; x ++){
+//   tags += "<h3>'"+title[x]+"'</h3><h4>'"+desc[x]+"'</h4><a href='"+url[x]+"'>Link</a><br>"
+//  }
+//  return tags;
+// }
 
   app.listen(PORT, () => console.log(`Listening on ${ PORT }`))
